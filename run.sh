@@ -67,7 +67,11 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   IFS=','
   for plugin in ${GF_INSTALL_PLUGINS}; do
     IFS=$OLDIFS
-    grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
+    if [ ! -z "${GF_INSTALL_PLUGINS_HTTP_PROXY}" ]; then
+      HTTP_PROXY=${GF_INSTALL_PLUGINS_HTTP_PROXY} HTTPS_PROXY=${GF_INSTALL_PLUGINS_HTTPS_PROXY} grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
+    else
+      grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
+    fi
   done
 fi
 
